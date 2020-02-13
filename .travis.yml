@@ -1,0 +1,29 @@
+sudo: required
+services:
+    - docker 
+
+before_install:
+    - docker build -t jialiw/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+# test section is mainly under script 
+# if any script exit w/ status code other than 0, then Travis CI is going to assume it is failed 
+    - docker run -e CI=true jialiw/react-test npm test
+
+after sucess:
+    # Build prod images after test 
+    - docker build -t jialiw/multi-react-client ./client 
+    - docker build -t jialiw/multi-nginx ./nginx
+    - docker build -t jialiw/multi-server ./server 
+    - docker build -t jialiw/multi-worker ./worker
+
+    # Login in to the docker CLI
+    # Not use $ docker login here as it will expose username and password directly 
+    # Instead, we will use Travis Environment Variables here 
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+    # Take above images and push them to docker hub
+    - docker push jialiw/multi-react-client
+    - docker push jialiw/multi-nginx
+    - docker push jialiw/multi-server
+    - docker push jialiw/multi-worker
