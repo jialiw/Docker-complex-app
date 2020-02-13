@@ -12,7 +12,7 @@ script:
 
 after sucess:
     # Build prod images after test 
-    - docker build -t jialiw/multi-react-client ./client 
+    - docker build -t jialiw/multi-react-client ./react-client 
     - docker build -t jialiw/multi-nginx ./nginx
     - docker build -t jialiw/multi-server ./server 
     - docker build -t jialiw/multi-worker ./worker
