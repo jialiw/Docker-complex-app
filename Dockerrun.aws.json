@@ -26,6 +26,7 @@
             "name": "nginx",
             "image": "jialiw/multi-nginx",
             "essential": true,
+            "hostname": "nginx",
             "portMappings": [
                 {
                     "hostPort": 80,
