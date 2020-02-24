@@ -1,0 +1,35 @@
+{
+    "AWSEDDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "react-client",
+            "image": "jialiw/multi-client",
+            "hostname": "react-client",
+            "essential": false
+        }, 
+        {
+            "name": "server",
+            "image": "jialiw/multi-server",
+            "hostname": "api",
+            "essential": false
+        }, 
+        {
+            "name": "worker",
+            "image": "jialiw/multi-worker",
+            "hostname": "worker",
+            "essential": false
+        }, 
+        {
+            "name": "nginx",
+            "image": "jialiw/multi-nginx",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ], 
+            "links": ["react-client", "server"]
+        }
+    ]
+}

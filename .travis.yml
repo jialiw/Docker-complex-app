@@ -27,3 +27,17 @@ after sucess:
     - docker push jialiw/multi-nginx
     - docker push jialiw/multi-server
     - docker push jialiw/multi-worker
+
+deploy:
+    provider: elasticbeanstalk
+    region: us-east-2
+    app: multi-docker
+    env: MultiDocker-env
+    bucket_name: elasticbeanstalk-us-east-2-824788361652
+    bucket_path: docker_multi
+    # only build when new code in specific branch 
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key:
+        secure: $AWS_SECRET_KEY
