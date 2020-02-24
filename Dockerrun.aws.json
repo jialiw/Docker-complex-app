@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "react-client",
-            "image": "jialiw/multi-client",
+            "image": "jialiw/multi-react-client",
             "hostname": "react-client",
             "essential": false,
             "memory": 128
