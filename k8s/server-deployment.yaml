@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: server-deployment
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            component: server # component is not a keyword, it is a key of a key-value pair
+    template:
+        metadata:
+            labels:
+                component: server
+        spec:
+            containers:
+                - name: server
+                  image: jialiw/multi-server
+                  ports:
+                    - containerPort: 5000 # open this port to connect with clusterIP 
