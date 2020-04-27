@@ -17,4 +17,9 @@ spec:
                   image: jialiw/multi-worker
                   # since there is no other services needs to directly access worker pods, 
                   # so no need to set up ports here 
-                  # no need to set associated service file
+                  # no need to set associated service
+                  env:
+                    - name: REDIS_HOST  # this is the reference name of redis cluster ip service
+                      value: redis-cluster-ip-service # must match name of redis cluster ip service
+                    - name: REDIS_PORT
+                      value: 6379
