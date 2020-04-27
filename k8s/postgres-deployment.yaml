@@ -25,3 +25,10 @@ spec:
                     - name: postgres-storage #must match one name inside volumes
                       mountPath: /var/lib/postgresql/data # specify the real data store path (mostly should match the db storage path)
                       subPath: postgres
+                  env:
+                    - name: POSTGRES_PASSWORD # override default postgres password 
+                      valueFrom:
+                        secretKeyRef:
+                            name: pgpassword
+                            key: PGPASSWORD
+                      
