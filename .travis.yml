@@ -1,6 +1,10 @@
 sudo: required
 services:
     - docker
+env:
+    global:
+        - GIT_SHA=$(git rev-parse HEAD) #set up global SHA value for later deployment usage
+        - CLOUDSDK_CORE_DISABLE_PROMPTS=1 # get rid of [y/n] pause during installation and deployment
 before_install:
     - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d #encrypt/decrypt secret file
     - curl https://sdk.clould.google.com | bash > /dev/null; # download and install google sdk
@@ -8,3 +12,28 @@ before_install:
     - gcloud components update kubectl # update kubectl inside travis environment
     - gcloud auth activate-service-account --key-file service-account.json # login gcp
     # activate-service-account == IAM 
+
+    - gcloud config set project multi-k8s-277102
+    - gcloud config set compute/zone us-central1-c	# get zone info inside kubernetes
+    - gcloud container clusters get-credentials multi-cluster # set what container cluster to point to
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+    - docker build -t jialiw/react-test -f ./react-client/Dockerfile.dev ./client # client folder is the build context
+
+
+script:
+    # - docker run jialiw/react-test npm test -- --coverage # --coverage will generate a coverage report --> a sign given to travis whether test has run successfully
+    # the above line might not work well
+    - docker run -e CI=true USERNAME/docker-react npm run test
+
+deploy:
+    provider: script 
+    # in the pervious projects, we use elasticbeanstalk as the provider 
+    # travis ci will then take the code and use pre-established deployment script for elasticbeanstalk
+
+    # however, travis ci has NO predefined script for k8s --> so we choose provider: script 
+    # this tells travis that we will take care of deployment, no need to look for predefined provider
+
+    script: bash ./deploy.sh # we will create our own deployment script 
+    on:
+        branch: master # only monitoring master branch
