@@ -24,7 +24,7 @@ before_install:
 script:
     # - docker run jialiw/react-test npm test -- --coverage # --coverage will generate a coverage report --> a sign given to travis whether test has run successfully
     # the above line might not work well
-    - docker run -e CI=true USERNAME/docker-react npm run test
+    - docker run -e CI=true jialiw/docker-react npm run test
 
 deploy:
     provider: script 
