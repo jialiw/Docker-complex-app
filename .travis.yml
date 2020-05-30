@@ -18,7 +18,7 @@ before_install:
     - gcloud container clusters get-credentials multi-cluster # set what container cluster to point to
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-    - docker build -t jialiw/react-test -f ./react-client/Dockerfile.dev ./client # client folder is the build context
+    - docker build -t jialiw/react-test -f ./react-client/Dockerfile.dev ./react-client # client folder is the build context
 
 
 script:
